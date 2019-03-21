@@ -1,0 +1,31 @@
+debug: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+#  tomcat:
+#    accesslog:
+#      buffered: true
+#      directory: E:/logs
+#      enabled: true
+#      file-date-format: .yyyy-MM-dd
+#      pattern: common
+#      prefix: access_log
+#      rename-on-rotate: false
+#      request-attributes-enabled: false
+#      rotate: true
+#      suffix: .log
+
+#日志文件设置
+#logging:
+#  config: "classpath:log.xml"
+#  level:
+#    pers.mrwangx.netdisk.controller: debug
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 2048MB
