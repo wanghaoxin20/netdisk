@@ -15,7 +15,7 @@ $(document).ready(function () {
     $("#about").click(function () {
         var ma = $("#modal_add");
         ma.html("");
-        ma.append(ModalContent("关于", "about"));
+        ma.append(ModalContent("关于作者", "about"));
         $("#modal").modal('show');
     });
 
