@@ -2,6 +2,8 @@ package pers.mrwangx.netdisk.controller;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ import java.net.URLEncoder;
 @RequestMapping(value = {"/NetDisk"})
 public class FileController implements CommandLineRunner {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
+
     private String DIR_PATH;
 
     @RequestMapping(value = {"", "/"})
@@ -33,6 +37,8 @@ public class FileController implements CommandLineRunner {
         if (file.exists()) {
             try {
                 response.setHeader("Content-Disposition", String.format("attachment;filename*=utf-8'zh_cn'%s",URLEncoder.encode(FilenameUtils.getName(filename), "UTF-8"), "utf-8"));
+                response.setHeader("Content-Type", "application/octet-stream");
+                response.setHeader("Content-Length", "" + file.length());
                 FileInputStream fin = new FileInputStream(file);
                 int length = 0;
                 byte[] data = new byte[1024];
@@ -40,9 +46,9 @@ public class FileController implements CommandLineRunner {
                     response.getOutputStream().write(data, 0, length);
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
         return null;

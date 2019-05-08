@@ -3,6 +3,8 @@ package pers.mrwangx.netdisk.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileExistsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,8 @@ import java.util.List;
 @RequestMapping(value = {"/netdisk"})
 public class NetDisk implements CommandLineRunner {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(NetDisk.class);
+
     private String DIR_PATH;
 
     @Resource
@@ -54,15 +58,15 @@ public class NetDisk implements CommandLineRunner {
         } catch (FileNotFoundException e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         } catch (UnsupportedEncodingException e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         } catch (Exception e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return netDiskService.getReturnData(status, msg, data);
     }
@@ -79,11 +83,11 @@ public class NetDisk implements CommandLineRunner {
         } catch (FileExistsException e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         } catch (Exception e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return netDiskService.getReturnData(status, msg, null);
     }
@@ -103,32 +107,34 @@ public class NetDisk implements CommandLineRunner {
             mv.addObject("description", e.getMessage());
             mv.addObject("url", "/netdisk/index");
             mv.setViewName("/WEB-INF/jsp/message.jsp");
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return mv;
     }
 
     /**
-     * @param mfile
+     * @param mfiles
      * @param path
      * @return
      */
     @RequestMapping(path = {"/uploadfile"}, method = {RequestMethod.POST}, produces = {"application/json;charset=utf-8"})
     @ResponseBody
-    public String uploadFile(@RequestParam(name = "file") MultipartFile mfile, @RequestParam String path) {
+    public String uploadFile(@RequestParam(name = "file") MultipartFile[] mfiles, @RequestParam String path) {
         int status = 200;
         String msg = null;
         try {
-            netDiskService.fileUpload(path, DIR_PATH, mfile);
+            for (MultipartFile mfile : mfiles) {
+                netDiskService.fileUpload(path, DIR_PATH, mfile);
+            }
             msg = "上传文件成功";
         } catch (IOException e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         } catch (Exception e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return netDiskService.getReturnData(status, msg, null);
     }
@@ -144,11 +150,11 @@ public class NetDisk implements CommandLineRunner {
         } catch (IOException e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         } catch (Exception e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return netDiskService.getReturnData(status, msg, null);
     }
@@ -163,7 +169,7 @@ public class NetDisk implements CommandLineRunner {
         } catch (Exception e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return netDiskService.getReturnData(status, msg, null);
     }

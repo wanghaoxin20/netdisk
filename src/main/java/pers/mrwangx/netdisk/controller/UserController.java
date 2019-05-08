@@ -2,6 +2,8 @@ package pers.mrwangx.netdisk.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pers.mrwangx.netdisk.service.NetDiskService;
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping(value = {"/user"})
 public class UserController {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Resource
     private UserService userService;
@@ -43,7 +47,7 @@ public class UserController {
         } catch (Exception e) {
             status = 400;
             msg = e.getMessage();
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);;
         }
         return netDiskService.getReturnData(status, msg, null);
     }

@@ -37,7 +37,12 @@ $(document).ready(function () {
 
     //选择文件
     $("#file").change(function () {
-        $("#filename").text(document.getElementById("file").files[0].name);
+        var file = document.getElementById("file").files;
+        var html = "";
+        for (var i in file) {
+            html += file[i].name + "<br>";
+        }
+        $("#filename").html(html);
     });
 
     //登出
@@ -130,14 +135,16 @@ $(document).ready(function () {
 
     //上传文件
     function uploadFile() {
-        var file = document.getElementById("file").files[0];
+        var file = document.getElementById("file").files;
         if (file == null) {
             alert("文件选择为空");
         } else {
             $("#progressb").css("display", "");
             var form = new FormData();
             form.append("path", crtpath);
-            form.append("file", file);
+            for (var i in file) {
+                form.append("file", file[i]);
+            }
             $.ajax({
                 url: base_url + "uploadfile",
                 type: "POST",
